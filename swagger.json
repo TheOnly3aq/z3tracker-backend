@@ -34,7 +34,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["Z3", "IS300H"]
+              "enum": ["Z3"]
             },
             "description": "Car segment (Z3)"
           }
@@ -79,7 +79,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["Z3", "IS300H"]
+              "enum": ["Z3"]
             },
             "description": "Car segment (Z3)"
           }
@@ -124,7 +124,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["Z3", "IS300H"]
+              "enum": ["Z3"]
             },
             "description": "Car segment (Z3)"
           },
@@ -210,7 +210,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["Z3", "IS300H"]
+              "enum": ["Z3"]
             },
             "description": "Car segment (Z3)"
           },
