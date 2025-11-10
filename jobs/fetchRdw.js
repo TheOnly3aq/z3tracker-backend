@@ -14,7 +14,7 @@ const fetchRdwData = async () => {
     const existingKentekenList = await RdwEntry.distinct("kenteken");
 
     const response = await axios.get(
-      "https://opendata.rdw.nl/resource/m9d7-ebf2.json?$where=upper(merk)='BMW'%20AND%20upper(handelsbenaming)%20like%20'%25Z3%25'&$limit=500"
+      "https://opendata.rdw.nl/resource/m9d7-ebf2.json?$where=upper(merk)='BMW'%20AND%20upper(handelsbenaming)%20like%20'%25Z3%25'&$limit=4000"
     );
 
     const entries = response.data;
