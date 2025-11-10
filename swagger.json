@@ -1,0 +1,590 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Lexus Tracker Backend API",
+    "description": "API for tracking Lexus vehicle statistics from RDW (Dutch Vehicle Authority) data",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "info@lexustracker.nl"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.lexustracker.nl",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Statistics",
+      "description": "Vehicle statistics and data endpoints"
+    }
+  ],
+  "paths": {
+    "/api/{car}/stats/daily-count": {
+      "get": {
+        "tags": ["Statistics"],
+        "summary": "Get daily vehicle counts for a car segment",
+        "description": "Retrieves daily count statistics for vehicles in the database for the IS250C car segment.",
+        "parameters": [
+          {
+            "name": "car",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["IS250C", "IS300H"]
+            },
+            "description": "Car segment (IS250C)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DailyCount"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unsupported car segment"
+          },
+          "500": {
+            "description": "Failed to fetch daily stats"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/{car}/stats/monthly-count": {
+      "get": {
+        "tags": ["Statistics"],
+        "summary": "Get monthly vehicle counts for a car segment",
+        "description": "Retrieves monthly count statistics for vehicles in the database for the IS250C car segment.",
+        "parameters": [
+          {
+            "name": "car",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["IS250C", "IS300H"]
+            },
+            "description": "Car segment (IS250C)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthlyCount"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unsupported car segment"
+          },
+          "500": {
+            "description": "Failed to fetch monthly stats"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/{car}/stats/rdw-data": {
+      "get": {
+        "tags": ["Statistics"],
+        "summary": "Get RDW vehicle data for a car segment",
+        "description": "Retrieves RDW vehicle data for the IS250C car segment. Supports search and sorting via query parameters.",
+        "parameters": [
+          {
+            "name": "car",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["IS250C", "IS300H"]
+            },
+            "description": "Car segment (IS250C)"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term for kenteken, merk, handelsbenaming, eerste_kleur, or inrichting"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Field to sort by (default: kenteken)"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            },
+            "description": "Sort order (asc or desc, default: asc)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RdwEntry"
+                      }
+                    },
+                    "lastUpdated": {
+                      "type": "string",
+                      "nullable": true,
+                      "format": "date-time"
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unsupported car segment"
+          },
+          "500": {
+            "description": "Failed to fetch RDW data"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/{car}/stats/rdw-data/{kenteken}": {
+      "get": {
+        "tags": ["Statistics"],
+        "summary": "Get RDW vehicle entry by kenteken for a car segment",
+        "description": "Retrieves a single RDW vehicle entry by license plate (kenteken) for the IS250C car segment.",
+        "parameters": [
+          {
+            "name": "car",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["IS250C", "IS300H"]
+            },
+            "description": "Car segment (IS250C)"
+          },
+          {
+            "name": "kenteken",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "License plate (kenteken) of the vehicle"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RdwEntry"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unsupported car segment"
+          },
+          "404": {
+            "description": "Vehicle not found"
+          },
+          "500": {
+            "description": "Failed to fetch RDW entry"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/stats/daily-differences": {
+      "get": {
+        "tags": ["Statistics"],
+        "summary": "Get daily differences",
+        "description": "Retrieves daily changes in vehicle data (added/removed vehicles)",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Specific date to get differences for (YYYY-MM-DD)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results to return",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Cache-Control": {
+                "description": "Caching policy",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DailyDifference"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API key required in the x-api-key header"
+      }
+    },
+    "schemas": {
+      "DailyCount": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date in YYYY-MM-DD format"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of vehicles for this date"
+          }
+        },
+        "required": [
+          "date",
+          "count"
+        ]
+      },
+      "MonthlyCount": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "month": {
+            "type": "string",
+            "description": "Month in YYYY-MM format"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of vehicles for this month"
+          }
+        },
+        "required": [
+          "month",
+          "count"
+        ]
+      },
+      "RdwEntry": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "kenteken": {
+            "type": "string",
+            "description": "License plate number"
+          },
+          "voertuigsoort": {
+            "type": "string",
+            "description": "Vehicle type"
+          },
+          "merk": {
+            "type": "string",
+            "description": "Brand"
+          },
+          "handelsbenaming": {
+            "type": "string",
+            "description": "Commercial name/model"
+          },
+          "vervaldatum_apk": {
+            "type": "string",
+            "description": "APK expiration date"
+          },
+          "datum_tenaamstelling": {
+            "type": "string",
+            "description": "Registration date"
+          },
+          "bruto_bpm": {
+            "type": "string",
+            "description": "Gross BPM tax"
+          },
+          "inrichting": {
+            "type": "string",
+            "description": "Body type"
+          },
+          "aantal_zitplaatsen": {
+            "type": "string",
+            "description": "Number of seats"
+          },
+          "eerste_kleur": {
+            "type": "string",
+            "description": "Primary color"
+          },
+          "tweede_kleur": {
+            "type": "string",
+            "description": "Secondary color"
+          },
+          "aantal_cilinders": {
+            "type": "string",
+            "description": "Number of cylinders"
+          },
+          "cilinderinhoud": {
+            "type": "string",
+            "description": "Engine displacement"
+          },
+          "massa_ledig_voertuig": {
+            "type": "string",
+            "description": "Empty vehicle mass"
+          },
+          "toegestane_maximum_massa_voertuig": {
+            "type": "string",
+            "description": "Maximum allowed vehicle mass"
+          },
+          "massa_rijklaar": {
+            "type": "string",
+            "description": "Ready-to-drive mass"
+          },
+          "datum_eerste_toelating": {
+            "type": "string",
+            "description": "Date of first registration"
+          },
+          "datum_eerste_tenaamstelling_in_nederland": {
+            "type": "string",
+            "description": "Date of first registration in Netherlands"
+          },
+          "wacht_op_keuren": {
+            "type": "string",
+            "description": "Awaiting inspection"
+          },
+          "catalogusprijs": {
+            "type": "string",
+            "description": "Catalog price"
+          },
+          "wam_verzekerd": {
+            "type": "string",
+            "description": "WAM insured"
+          },
+          "aantal_deuren": {
+            "type": "string",
+            "description": "Number of doors"
+          },
+          "aantal_wielen": {
+            "type": "string",
+            "description": "Number of wheels"
+          },
+          "lengte": {
+            "type": "string",
+            "description": "Length"
+          },
+          "europese_voertuigcategorie": {
+            "type": "string",
+            "description": "European vehicle category"
+          },
+          "plaats_chassisnummer": {
+            "type": "string",
+            "description": "Chassis number location"
+          },
+          "technische_max_massa_voertuig": {
+            "type": "string",
+            "description": "Technical maximum vehicle mass"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type"
+          },
+          "typegoedkeuringsnummer": {
+            "type": "string",
+            "description": "Type approval number"
+          },
+          "variant": {
+            "type": "string",
+            "description": "Variant"
+          },
+          "uitvoering": {
+            "type": "string",
+            "description": "Version"
+          },
+          "volgnummer_wijziging_eu_typegoedkeuring": {
+            "type": "string",
+            "description": "EU type approval modification sequence number"
+          },
+          "vermogen_massarijklaar": {
+            "type": "string",
+            "description": "Power-to-weight ratio"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "kenteken"
+        ]
+      },
+      "DailyDifference": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Date in YYYY-MM-DD format"
+          },
+          "changes": {
+            "type": "object",
+            "properties": {
+              "added": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "License plates added on this date"
+              },
+              "removed": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "License plates removed on this date"
+              }
+            }
+          },
+          "totalChanges": {
+            "type": "integer",
+            "description": "Total number of changes for this date"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "date",
+          "totalChanges"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+    }
+  }
+}

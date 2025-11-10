@@ -1,0 +1,27 @@
+{
+  "name": "z3tracker-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "populate-rdw": "node scripts/populateRdwData.js",
+    "health": "curl -f http://localhost:5050/swagger.json || exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.13.1",
+    "node-cron": "^4.0.7",
+    "swagger-ui": "^5.27.0",
+    "swagger-ui-dist": "^5.27.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
