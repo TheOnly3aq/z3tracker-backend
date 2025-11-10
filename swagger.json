@@ -26,7 +26,7 @@
       "get": {
         "tags": ["Statistics"],
         "summary": "Get daily vehicle counts for a car segment",
-        "description": "Retrieves daily count statistics for vehicles in the database for the IS250C car segment.",
+        "description": "Retrieves daily count statistics for vehicles in the database for the Z3 car segment.",
         "parameters": [
           {
             "name": "car",
@@ -34,9 +34,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["IS250C", "IS300H"]
+              "enum": ["Z3", "IS300H"]
             },
-            "description": "Car segment (IS250C)"
+            "description": "Car segment (Z3)"
           }
         ],
         "responses": {
@@ -71,7 +71,7 @@
       "get": {
         "tags": ["Statistics"],
         "summary": "Get monthly vehicle counts for a car segment",
-        "description": "Retrieves monthly count statistics for vehicles in the database for the IS250C car segment.",
+        "description": "Retrieves monthly count statistics for vehicles in the database for the Z3 car segment.",
         "parameters": [
           {
             "name": "car",
@@ -79,9 +79,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["IS250C", "IS300H"]
+              "enum": ["Z3", "IS300H"]
             },
-            "description": "Car segment (IS250C)"
+            "description": "Car segment (Z3)"
           }
         ],
         "responses": {
@@ -116,7 +116,7 @@
       "get": {
         "tags": ["Statistics"],
         "summary": "Get RDW vehicle data for a car segment",
-        "description": "Retrieves RDW vehicle data for the IS250C car segment. Supports search and sorting via query parameters.",
+        "description": "Retrieves RDW vehicle data for the Z3 car segment. Supports search and sorting via query parameters.",
         "parameters": [
           {
             "name": "car",
@@ -124,9 +124,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["IS250C", "IS300H"]
+              "enum": ["Z3", "IS300H"]
             },
-            "description": "Car segment (IS250C)"
+            "description": "Car segment (Z3)"
           },
           {
             "name": "search",
@@ -202,7 +202,7 @@
       "get": {
         "tags": ["Statistics"],
         "summary": "Get RDW vehicle entry by kenteken for a car segment",
-        "description": "Retrieves a single RDW vehicle entry by license plate (kenteken) for the IS250C car segment.",
+        "description": "Retrieves a single RDW vehicle entry by license plate (kenteken) for the Z3 car segment.",
         "parameters": [
           {
             "name": "car",
@@ -210,9 +210,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["IS250C", "IS300H"]
+              "enum": ["Z3", "IS300H"]
             },
-            "description": "Car segment (IS250C)"
+            "description": "Car segment (Z3)"
           },
           {
             "name": "kenteken",

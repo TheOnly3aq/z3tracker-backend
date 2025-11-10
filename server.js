@@ -5,7 +5,7 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const checkApiKey = require("./apiKeyMiddleware");
 const statsRoute = require("./routes/stats");
-const { scheduleIS250CJob } = require("./jobs/fetchRdw");
+const { scheduleZ3Job } = require("./jobs/fetchRdw");
 const RdwEntry = require("./models/rdwEntry");
 const DailyCount = require("./models/dailyCount");
 const MonthlyCount = require("./models/monthlyCount");
@@ -41,7 +41,7 @@ const startServer = async () => {
     await MonthlyCount.createTable();
     await DailyDifference.createTable();
 
-    scheduleIS250CJob();
+    scheduleZ3Job();
 
     app.use("/api/:car/stats", checkApiKey, statsRoute);
 

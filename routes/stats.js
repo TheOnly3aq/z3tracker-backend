@@ -7,7 +7,7 @@ const DailyDifference = require("../models/dailyDifference");
 
 const getModelsForCar = (car) => {
   const key = (car || "").toUpperCase();
-  if (key === "IS250C") {
+  if (key === "Z3") {
     return {
       DailyCount,
       MonthlyCount,
@@ -22,7 +22,7 @@ router.use((req, res, next) => {
   const models = getModelsForCar(req.params.car);
   if (!models) {
     return res.status(400).json({
-      error: "Unsupported car segment. Use IS250C.",
+      error: "Unsupported car segment. Use Z3.",
     });
   }
   req.models = models;

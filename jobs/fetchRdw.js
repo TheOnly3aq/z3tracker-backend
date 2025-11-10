@@ -133,9 +133,9 @@ const fetchRdwData = async () => {
   }
 };
 
-const scheduleIS250CJob = () => {
-  console.log("Scheduling IS250C cron job...");
+const scheduleZ3Job = () => {
+  console.log("Scheduling Z3 cron job...");
   cron.schedule("0 0 * * *", fetchRdwData);
 };
 
-module.exports = { fetchRdwData, scheduleIS250CJob };
+module.exports = { fetchRdwData, scheduleZ3Job };
