@@ -4,6 +4,7 @@ const DailyCount = require("../models/dailyCount");
 const MonthlyCount = require("../models/monthlyCount");
 const RdwEntry = require("../models/rdwEntry");
 const DailyDifference = require("../models/dailyDifference");
+const DailyStats = require("../models/dailyStats");
 
 const getModelsForCar = (car) => {
   const key = (car || "").toUpperCase();
@@ -17,6 +18,32 @@ const getModelsForCar = (car) => {
   }
   return null;
 };
+
+router.get("/summary", async (req, res) => {
+  try {
+    const dateString = new Date().toISOString().split("T")[0];
+    const stats = await DailyStats.findOne({ date: dateString });
+
+    if (!stats) {
+      return res.status(404).json({ error: "Stats not found for today" });
+    }
+
+    const colorCounts = typeof stats.color_counts === "string" 
+      ? JSON.parse(stats.color_counts) 
+      : stats.color_counts;
+
+    res.json({
+      date: stats.date,
+      totalVehicles: stats.total_vehicles,
+      insuredCount: stats.insured_count,
+      importedCount: stats.imported_count,
+      colors: colorCounts,
+    });
+  } catch (err) {
+    console.error("Error fetching summary stats:", err);
+    res.status(500).json({ error: "Failed to fetch summary stats" });
+  }
+});
 
 router.use((req, res, next) => {
   const models = getModelsForCar(req.params.car);

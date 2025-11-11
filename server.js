@@ -10,6 +10,7 @@ const RdwEntry = require("./models/rdwEntry");
 const DailyCount = require("./models/dailyCount");
 const MonthlyCount = require("./models/monthlyCount");
 const DailyDifference = require("./models/dailyDifference");
+const DailyStats = require("./models/dailyStats");
 
 const swaggerDocument = require("./swagger.json");
 
@@ -40,6 +41,7 @@ const startServer = async () => {
     await DailyCount.createTable();
     await MonthlyCount.createTable();
     await DailyDifference.createTable();
+    await DailyStats.createTable();
 
     scheduleZ3Job();
 

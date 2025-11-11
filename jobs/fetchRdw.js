@@ -5,6 +5,7 @@ const DailyCount = require("../models/dailyCount");
 const MonthlyCount = require("../models/monthlyCount");
 const RdwEntry = require("../models/rdwEntry");
 const DailyDifference = require("../models/dailyDifference");
+const DailyStats = require("../models/dailyStats");
 
 const fetchRdwData = async () => {
   const startTime = Date.now();
@@ -123,6 +124,54 @@ const fetchRdwData = async () => {
 
       console.log(`(Z3) No changes detected for ${dateString}`);
     }
+
+    console.log("(Z3) Calculating daily stats...");
+    const allEntries = await RdwEntry.find({});
+    const totalVehicles = allEntries.rows.length;
+
+    const insuredCount = allEntries.rows.filter(
+      (entry) => entry.wam_verzekerd === "Ja" || entry.wam_verzekerd === "JA"
+    ).length;
+
+    const importedCount = allEntries.rows.filter(
+      (entry) => entry.export_indicator && entry.export_indicator.trim() !== ""
+    ).length;
+
+    const colorCounts = {
+      ROOD: 0,
+      BLAUW: 0,
+      GRIJS: 0,
+      GROEN: 0,
+      BEIGE: 0,
+      BRUIN: 0,
+      GEEL: 0,
+      WIT: 0,
+      ZWART: 0,
+    };
+
+    allEntries.rows.forEach((entry) => {
+      const color = (entry.eerste_kleur || "").toUpperCase();
+      if (colorCounts.hasOwnProperty(color)) {
+        colorCounts[color]++;
+      }
+    });
+
+    await DailyStats.findOneAndUpdate(
+      { date: dateString },
+      {
+        $set: {
+          total_vehicles: totalVehicles,
+          insured_count: insuredCount,
+          imported_count: importedCount,
+          color_counts: colorCounts,
+        },
+      },
+      { upsert: true, new: true }
+    );
+
+    console.log(
+      `(Z3) Daily stats saved: ${totalVehicles} total, ${insuredCount} insured, ${importedCount} imported`
+    );
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(1);
     console.log(`(Z3) Data fetch completed in ${duration}s`);
