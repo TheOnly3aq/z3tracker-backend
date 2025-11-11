@@ -134,7 +134,11 @@ const fetchRdwData = async () => {
     ).length;
 
     const importedCount = allEntries.rows.filter(
-      (entry) => entry.export_indicator && entry.export_indicator.trim() !== ""
+      (entry) =>
+        entry.datum_eerste_tenaamstelling_in_nederland &&
+        entry.datum_eerste_toelating &&
+        entry.datum_eerste_tenaamstelling_in_nederland !==
+          entry.datum_eerste_toelating
     ).length;
 
     const colorCounts = {
