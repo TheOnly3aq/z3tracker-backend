@@ -4,7 +4,7 @@
 <div align="center">
 
 
-# LEXUSTRACKER-BACKEND
+# Z3 Radar - Backend
 
 <em>Built with the tools and technologies:</em>
 
