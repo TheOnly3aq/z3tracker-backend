@@ -20,7 +20,7 @@ const fetchRdwData = async () => {
 
     console.log("(Z3) Fetching data from RDW API...");
     const response = await axios.get(
-      "https://opendata.rdw.nl/resource/m9d7-ebf2.json?$where=upper(merk)='BMW'%20AND%20upper(handelsbenaming)%20like%20'%25Z3%25'&$limit=4000"
+      "https://opendata.rdw.nl/resource/m9d7-ebf2.json?$where=upper(merk)='BMW'%20AND%20(upper(handelsbenaming)%20like%20'%25Z3%25'%20OR%20upper(handelsbenaming)%20like%20'%25Z%20REIHE%25')&$limit=1500"
     );
 
     const entries = response.data;
