@@ -4,6 +4,10 @@ const allowedKeys = (process.env.API_KEYS || "")
     .filter(Boolean);
 
 function checkApiKey(req, res, next) {
+    if (process.env.APP_ENV === "development") {
+      return next();
+    }
+
     const headerKey = req.header("x-api-key");
     const auth = req.header("authorization") || "";
     const authMatch = auth.match(/^ApiKey\s+(.+)$/i);
